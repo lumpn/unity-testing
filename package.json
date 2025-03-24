@@ -1,0 +1,22 @@
+{
+  "name": "de.lumpn.unity-testing",
+  "version": "0.1.0",
+  "displayName": "Lumpn Testing",
+  "description": "Miscellaneous functionality for testing prefab and asset setup in Unity.",
+  "dependencies": {
+    "com.unity.test-framework": "1.1.33"
+  },
+  "keywords": [
+    "lumpn",
+    "test",
+    "testing",
+    "nunit",
+    "asset",
+    "prefab",
+    "setup"
+  ],
+  "author": {
+    "name": "Jonas Boetel",
+    "url": "https://github.com/lumpn"
+  }
+}
