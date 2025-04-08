@@ -3,6 +3,7 @@
 // Copyright(c) 2025 Jonas Boetel
 //----------------------------------------
 using NUnit.Framework;
+using System.Globalization;
 using UnityEditor;
 using UnityEngine;
 using Array = System.Array;
@@ -28,7 +29,7 @@ namespace Lumpn.Testing
                             var type = component.GetType();
                             var assetPath = AssetDatabase.GetAssetPath(component);
                             var scriptPath = GetPath(component.transform);
-                            cachedPath = $"{assetPath}/{type}/{scriptPath}";
+                            cachedPath = $"{assetPath}/{scriptPath}/{type}";
                         }
                         else
                         {
@@ -102,6 +103,14 @@ namespace Lumpn.Testing
             }
         }
 
+        public void IsFieldNotNegative(long field, string fieldName)
+        {
+            if (field < 0L)
+            {
+                Assert.Fail("Negative field '{0}' in '{1}'", fieldName, context.path);
+            }
+        }
+
         public void IsFieldNotNull(Array field, string fieldName)
         {
             if (field == null)
@@ -110,11 +119,27 @@ namespace Lumpn.Testing
             }
         }
 
+        public void IsFieldEmpty(string field, string fieldName)
+        {
+            if (field == null || field.Length > 0)
+            {
+                Assert.Fail("Non-empty field '{0}' in '{1}'", fieldName, context.path);
+            }
+        }
+
         public void IsFieldOne(Vector3 field, string fieldName)
         {
             if (field != Vector3.one)
             {
                 Assert.Fail("Non-one field '{0}' in '{1}'", fieldName, context.path);
+            }
+        }
+
+        public void IsFieldZero(int field, string fieldName)
+        {
+            if (field != 0)
+            {
+                Assert.Fail("Non-zero field '{0}' in '{1}'", fieldName, context.path);
             }
         }
 
@@ -131,6 +156,63 @@ namespace Lumpn.Testing
             if (field != Quaternion.identity)
             {
                 Assert.Fail("Non-zero field '{0}' in '{1}'", fieldName, context.path);
+            }
+        }
+
+        public void IsFieldEqual(bool expected, bool field, string fieldName)
+        {
+            if (field != expected)
+            {
+                Assert.Fail("Mismatching field '{0}' (expected '{1}', actual '{2}') in '{3}'", fieldName, expected, field, context.path);
+            }
+        }
+
+        public void IsFieldEqual(System.Enum expected, System.Enum field, string fieldName)
+        {
+            if (!field.Equals(expected))
+            {
+                Assert.Fail("Mismatching field '{0}' (expected '{1}', actual '{2}') in '{3}'", fieldName, expected, field, context.path);
+            }
+        }
+
+        public void IsFieldNotEqual(System.Enum forbidden, System.Enum field, string fieldName)
+        {
+            if (field.Equals(forbidden))
+            {
+                Assert.Fail("Mismatching field '{0}' (forbidden '{1}', actual '{2}') in '{3}'", fieldName, forbidden, field, context.path);
+            }
+        }
+
+        public void IsFieldEqual(string expected, int expectedStart, string field, string fieldName)
+        {
+            var compare = string.Compare(expected, expectedStart, field, 0, field.Length, CultureInfo.InvariantCulture, CompareOptions.Ordinal);
+            if (compare != 0)
+            {
+                Assert.Fail("Mismatching field '{0}' (expected '{1}', actual '{2}') in '{3}'", fieldName, expected.Substring(expectedStart), field, context.path);
+            }
+        }
+
+        public void IsFieldGreater(int threshold, int field, string fieldName)
+        {
+            if (field <= threshold)
+            {
+                Assert.Fail("Mismatching field '{0}' (expected >{1}, actual {2}) in '{3}'", fieldName, threshold, field, context.path);
+            }
+        }
+
+        public void IsFieldGreater(long threshold, long field, string fieldName)
+        {
+            if (field <= threshold)
+            {
+                Assert.Fail("Mismatching field '{0}' (expected >{1}, actual {2}) in '{3}'", fieldName, threshold, field, context.path);
+            }
+        }
+
+        public void IsFieldGreater(float threshold, float field, string fieldName)
+        {
+            if (field <= threshold)
+            {
+                Assert.Fail("Mismatching field '{0}' (expected >{1}, actual {2}) in '{3}'", fieldName, threshold, field, context.path);
             }
         }
 
